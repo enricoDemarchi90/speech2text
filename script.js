@@ -9,10 +9,29 @@ const refreshButton = document.querySelector(".refresh-button");
 
 let resultadoInterno;
 
+const gerarNumero = function () {
+  const random1 = Math.floor(Math.random() * 11);
+  const random2 = Math.floor(Math.random() * 11);
+  parcela1.innerText = random1;
+  parcela2.innerText = random2;
+
+  resultadoInterno = random1 + random2;
+
+  speakButton.disabled = false;
+  // speech.stop();
+  resultado.textContent = "?";
+
+  // console.log(resultadoInterno);
+};
+
+gerarNumero();
+
 class speechApi {
   constructor() {
     const SpeechToText =
       window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const player = document.querySelector("lottie-player");
 
     this.speechApi = new SpeechToText();
     this.output = resultado.output;
@@ -23,8 +42,18 @@ class speechApi {
       console.log("resultado obtido");
       var resultIndex = e.resultIndex;
       var transcript = e.results[resultIndex][0].transcript;
-      console.log(transcript);
+      console.log(transcript, resultadoInterno);
       resultado.textContent = transcript;
+
+      if (Number(transcript) == resultadoInterno) {
+        player.load(
+          "https://assets9.lottiefiles.com/packages/lf20_PMFJFG0XnH.json"
+        );
+      } else {
+        player.load(
+          "https://assets1.lottiefiles.com/packages/lf20_1zvbfarz.json"
+        );
+      }
     };
   }
 
@@ -37,15 +66,7 @@ class speechApi {
   }
 }
 
-refreshButton.addEventListener("click", function () {
-  const random1 = Math.floor(Math.random() * 11);
-  const random2 = Math.floor(Math.random() * 11);
-  parcela1.innerText = random1;
-  parcela2.innerText = random2;
-
-  resultadoInterno = random1 + random2;
-  // console.log(resultadoInterno);
-});
+refreshButton.addEventListener("click", gerarNumero);
 
 // speakButton.addEventListener("click", function () {
 //   const resultadoFala = prompt("Digite a resposta");
@@ -57,16 +78,13 @@ refreshButton.addEventListener("click", function () {
 //   }
 // });
 
-var speech = new speechApi();
+const speech = new speechApi();
 
-speakButton.addEventListener("click", (e) => {
-  speakButton.disabled = true;
-  pauseSpeakButton.disabled = false;
+// speakButton.addEventListener("click", (e) => {
+//   speakButton.disabled = true;
+//   speech.start();
+// });
+
+const start = function () {
   speech.start();
-});
-
-pauseSpeakButton.addEventListener("click", () => {
-  speakButton.disabled = false;
-  pauseSpeakButton.disabled = true;
-  speech.stop();
-});
+};
