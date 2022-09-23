@@ -15,6 +15,8 @@ const gerarNumero = function () {
   parcela1.innerText = random1;
   parcela2.innerText = random2;
 
+  const question = `Quanto é ${random1} mais ${random2}?`;
+
   resultadoInterno = random1 + random2;
 
   speakButton.disabled = false;
@@ -22,6 +24,11 @@ const gerarNumero = function () {
   resultado.textContent = "?";
 
   // console.log(resultadoInterno);
+
+  const utterance = new SpeechSynthesisUtterance(question);
+  utterance.lang = "pt-Br";
+  utterance.rate = 1;
+  speechSynthesis.speak(utterance);
 };
 
 gerarNumero();
